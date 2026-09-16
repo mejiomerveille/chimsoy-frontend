@@ -39,10 +39,12 @@ export default function RootLayout() {
       <Stack screenOptions={{ headerShown: false }}>
         <Stack.Screen name="(auth)" />
         <Stack.Screen name="(tabs)" />
-        <Stack.Screen name="communities" />
-        <Stack.Screen name="leaderboard" />
+        <Stack.Screen name="stake" />
         <Stack.Screen name="matchmaking" />
+        <Stack.Screen name="opponent" />
         <Stack.Screen name="game" />
+        <Stack.Screen name="quiz" />
+        <Stack.Screen name="math" />
         <Stack.Screen name="result" />
         <Stack.Screen name="notifications" />
         <Stack.Screen name="settings" />

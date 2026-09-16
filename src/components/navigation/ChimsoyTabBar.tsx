@@ -2,8 +2,8 @@ import { Pressable, StyleSheet, Text, View } from 'react-native';
 import type { ComponentType } from 'react';
 import type { BottomTabBarProps } from '@react-navigation/bottom-tabs';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { BarChart3, Gamepad2, Home, Trophy, User, Wallet } from 'lucide-react-native';
-import { colors, radius, spacing, typography } from '@/src/theme/tokens';
+import { BarChart3, Gamepad2, Home, Trophy, User, Users } from 'lucide-react-native';
+import { colors, radii, spacing, typography } from '@/src/theme/tokens';
 
 type TabIconProps = { color: string; size: number; strokeWidth?: number };
 type TabItem = { route: string; label: string; icon: ComponentType<TabIconProps> };
@@ -11,8 +11,8 @@ type TabItem = { route: string; label: string; icon: ComponentType<TabIconProps>
 const tabs: TabItem[] = [
   { route: 'index', label: 'Accueil', icon: Home },
   { route: 'games', label: 'Jeux', icon: Gamepad2 },
-  { route: 'tournaments', label: 'Tournois', icon: Trophy },
-  { route: 'wallet', label: 'Portefeuille', icon: Wallet },
+  { route: 'communities', label: 'Communautés', icon: Users },
+  { route: 'leaderboard', label: 'Classements', icon: BarChart3 },
   { route: 'profile', label: 'Profil', icon: User },
 ];
 
@@ -45,7 +45,7 @@ export function ChimsoyTabBar({ state, descriptors, navigation }: BottomTabBarPr
               onPress={onPress}
               style={({ pressed }) => [styles.item, focused && styles.itemActive, pressed && styles.pressed]}
             >
-              <Icon color={focused ? colors.background : colors.textSecondary} size={23} strokeWidth={2.4} />
+              <Icon color={focused ? colors.blue : colors.inkMuted} size={23} strokeWidth={2.4} />
               {focused && <Text style={styles.label}>{tab.label}</Text>}
             </Pressable>
           );
@@ -56,10 +56,10 @@ export function ChimsoyTabBar({ state, descriptors, navigation }: BottomTabBarPr
 }
 
 const styles = StyleSheet.create({
-  container: { paddingHorizontal: spacing.md, paddingTop: spacing.sm, backgroundColor: colors.background },
-  bar: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', padding: spacing.sm, backgroundColor: colors.surface, borderRadius: radius.full, minHeight: 68 },
-  item: { minWidth: 50, height: 52, paddingHorizontal: spacing.md, alignItems: 'center', justifyContent: 'center', flexDirection: 'row', gap: spacing.sm, borderRadius: radius.full },
-  itemActive: { flex: 1, backgroundColor: colors.accent },
-  label: { color: colors.background, fontSize: 13, fontWeight: '700', fontFamily: typography.fontFamily.bold },
+  container: { paddingHorizontal: spacing.md, paddingTop: spacing.sm, backgroundColor: colors.ink },
+  bar: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', padding: spacing.sm, backgroundColor: colors.inkSoft, borderRadius: radii.pill, minHeight: 68 },
+  item: { minWidth: 50, height: 52, paddingHorizontal: spacing.md, alignItems: 'center', justifyContent: 'center', flexDirection: 'row', gap: spacing.sm, borderRadius: radii.pill },
+  itemActive: { flex: 1, backgroundColor: 'rgba(26,63,228,0.15)' },
+  label: { color: colors.blue, fontSize: 13, fontWeight: '700', fontFamily: typography.fontFamily.bold },
   pressed: { opacity: 0.78, transform: [{ scale: 0.96 }] },
 });

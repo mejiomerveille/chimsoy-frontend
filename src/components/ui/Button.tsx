@@ -1,6 +1,6 @@
 import { Pressable, StyleSheet, Text } from 'react-native';
 import type { ReactNode } from 'react';
-import { colors, radius, spacing, typography } from '@/src/theme/tokens';
+import { colors, radii, spacing, typography , theme} from '@/src/theme/tokens';
 
 type ButtonVariant = 'primary' | 'accent' | 'ghost';
 
@@ -38,18 +38,18 @@ const styles = StyleSheet.create({
   base: {
     minHeight: 48,
     paddingHorizontal: spacing.lg,
-    borderRadius: radius.full,
+    borderRadius: radii.pill,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
     gap: spacing.sm,
   },
-  primary: { backgroundColor: colors.primary },
-  accent: { backgroundColor: colors.accent },
+  primary: { backgroundColor: theme.link },
+  accent: { backgroundColor: theme.action },
   ghost: { paddingHorizontal: spacing.sm, backgroundColor: 'transparent' },
   fullWidth: { width: '100%' },
   pressed: { opacity: 0.78, transform: [{ scale: 0.98 }] },
   disabled: { opacity: 0.45 },
   label: { color: '#fff', fontSize: 15, fontWeight: '700', fontFamily: typography.fontFamily.bold },
-  ghostLabel: { color: colors.textSecondary },
+  ghostLabel: { color: theme.textSecondary },
 });

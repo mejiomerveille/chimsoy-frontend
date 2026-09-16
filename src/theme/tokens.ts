@@ -4,39 +4,26 @@
 // PALETTE BRUTE — inchangée par rapport à ta version, aucune valeur modifiée
 // ---------------------------------------------------------------------------
 export const colors = {
-  ink: '#091A1B',
-  inkSoft: '#102A2A',
-  inkMuted: '#567070',
-  cream: '#F6F4ED',
-  white: '#FFFFFF',
-  orange: '#FF6B35',
+  ink: '#0B0F1A',
+  inkSoft: '#151C2E',
+  inkMuted: '#9AA5B8',
+  cream: '#F5F7FA',
+  white: '#F5F7FA',
+  orange: '#FF6A2C',
   orangeDeep: '#D94C1C',
-  orangeSoft: '#FFE2D6',
-  mint: '#B8F2D0',
-  mintDeep: '#2FA56D',
-  lime: '#D7F36B',
-  yellow: '#F5C84B',
-  blue: '#78C8E8',
-  red: '#E05252',
-  burgundy: '#874A4A',
-  burgundyDeep: '#5D2C2F',
-  burgundySoft: '#F4E9E8',
-  line: '#D9E1DA',
-  shadow: '#001414',
-
-  background: '#0B0F1A',
-  surface: '#151C2E',
-  primary: '#1A3FE4',
-  accent: '#FF6A2C',
-  gold: '#F2B705',
-  success: '#1FAE5E',
-  danger: '#E13B3B',
-  textPrimary: '#F5F7FA',
-  textSecondary: '#9AA5B8',
+  orangeSoft: '#3A2119',
+  mint: '#8DE0AD',
+  mintDeep: '#1FAE5E',
+  lime: '#F2B705',
+  yellow: '#F2B705',
+  blue: '#1A3FE4',
+  red: '#E13B38',
+  burgundy: '#E13B38',
+  burgundyDeep: '#B7282B',
+  burgundySoft: '#3A1C26',
+  line: '#2A344A',
+  shadow: '#000000',
 } as const;
-
-
-export const radius = { sm: 8, md: 12, lg: 16, full: 999 } as const;
 
 export const spacing = {
   xs: 4,

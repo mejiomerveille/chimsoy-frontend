@@ -83,12 +83,12 @@ export default function OnboardingScreen() {
         animated: true,
       });
     } else {
-      router.replace('/(auth)/login');
+      router.replace('/(auth)/language');
     }
   };
 
   const handleSkip = () => {
-    router.replace('/(auth)/login');
+    router.replace('/(auth)/language');
   };
 
   const handleScroll = (e: {
@@ -294,7 +294,7 @@ const styles = StyleSheet.create({
      * MAINTENANT :
      * On remonte le texte de 90px supplémentaires.
      */
-    paddingBottom: spacing.xxl + 90,
+    paddingBottom: spacing.xxl + 220,
   },
 
   title: {

@@ -12,7 +12,11 @@ export default function AuthLayout() {
     <Stack screenOptions={{ headerShown: false }}>
       <Stack.Screen name="splash" />
       <Stack.Screen name="onboarding" />
+      <Stack.Screen name="language" />
       <Stack.Screen name="login" />
+      <Stack.Screen name="forgot-password" />
+      <Stack.Screen name="reset-password" />
+      <Stack.Screen name="create-profile" />
     </Stack>
   );
 }

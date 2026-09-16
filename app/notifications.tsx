@@ -3,7 +3,7 @@ import { router } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Animated, { FadeInDown } from 'react-native-reanimated';
 import { Bell, CheckCheck, CircleDollarSign, Trophy, Users } from 'lucide-react-native';
-import { colors, radius, spacing, typography } from '@/src/theme/tokens';
+import { colors, radii, spacing, typography , theme} from '@/src/theme/tokens';
 import { mockNotifications } from '@/src/services/mockData';
 import { useAppStore } from '@/src/store/useAppStore';
 
@@ -38,7 +38,7 @@ export default function NotificationsScreen() {
           </View>
           {unreadCount > 0 && (
             <Pressable onPress={markAllRead} style={styles.markAllBtn}>
-              <CheckCheck color={colors.accent} size={16} />
+              <CheckCheck color={theme.action} size={16} />
               <Text style={styles.markAllText}>Tout lire</Text>
             </Pressable>
           )}
@@ -56,7 +56,7 @@ export default function NotificationsScreen() {
                 style={[styles.row, !isRead && styles.rowUnread]}
               >
                 <View style={[styles.iconWrap, !isRead && styles.iconWrapUnread]}>
-                  <Icon color={isRead ? colors.textSecondary : colors.textPrimary} size={18} />
+                  <Icon color={isRead ? theme.textSecondary : theme.textPrimary} size={18} />
                 </View>
                 <View style={styles.info}>
                   <Text style={styles.title2}>{n.title}</Text>
@@ -74,22 +74,22 @@ export default function NotificationsScreen() {
 }
 
 const styles = StyleSheet.create({
-  safeArea: { flex: 1, backgroundColor: colors.background },
+  safeArea: { flex: 1, backgroundColor: theme.background },
   header: { padding: spacing.lg, gap: spacing.xs },
   headerTop: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' },
-  eyebrow: { color: colors.accent, fontSize: 10, fontWeight: '700', fontFamily: typography.fontFamily.bold, letterSpacing: 1.4 },
-  title: { color: colors.textPrimary, fontSize: 26, fontWeight: '700', fontFamily: typography.fontFamily.bold, letterSpacing: -0.5 },
+  eyebrow: { color: theme.action, fontSize: 10, fontWeight: '700', fontFamily: typography.fontFamily.bold, letterSpacing: 1.4 },
+  title: { color: theme.textPrimary, fontSize: 26, fontWeight: '700', fontFamily: typography.fontFamily.bold, letterSpacing: -0.5 },
   markAllBtn: { flexDirection: 'row', alignItems: 'center', gap: 4, backgroundColor: 'rgba(255,106,44,0.12)', paddingHorizontal: spacing.md, paddingVertical: 8, borderRadius: 999 },
-  markAllText: { color: colors.accent, fontSize: 12, fontWeight: '700', fontFamily: typography.fontFamily.bold },
+  markAllText: { color: theme.action, fontSize: 12, fontWeight: '700', fontFamily: typography.fontFamily.bold },
   list: { padding: spacing.lg, gap: spacing.sm },
-  row: { flexDirection: 'row', alignItems: 'flex-start', gap: spacing.sm, backgroundColor: colors.surface, borderRadius: radius.md, padding: spacing.md },
+  row: { flexDirection: 'row', alignItems: 'flex-start', gap: spacing.sm, backgroundColor: theme.surface, borderRadius: radii.md, padding: spacing.md },
   rowUnread: { backgroundColor: 'rgba(26,63,228,0.12)' },
   rowPressed: { opacity: 0.85, transform: [{ scale: 0.98 }] },
-  iconWrap: { width: 40, height: 40, alignItems: 'center', justifyContent: 'center', borderRadius: 20, backgroundColor: colors.background },
+  iconWrap: { width: 40, height: 40, alignItems: 'center', justifyContent: 'center', borderRadius: 20, backgroundColor: theme.background },
   iconWrapUnread: { backgroundColor: 'rgba(255,255,255,0.06)' },
   info: { flex: 1, gap: 4 },
-  title2: { color: colors.textPrimary, fontSize: 15, fontWeight: '700', fontFamily: typography.fontFamily.bold },
-  body: { color: colors.textSecondary, fontSize: 13, lineHeight: 18, fontFamily: typography.fontFamily.regular },
-  date: { color: colors.textSecondary, fontSize: 11, marginTop: 2, fontFamily: typography.fontFamily.regular },
-  unreadDot: { width: 8, height: 8, borderRadius: 4, backgroundColor: colors.accent, marginTop: 6 },
+  title2: { color: theme.textPrimary, fontSize: 15, fontWeight: '700', fontFamily: typography.fontFamily.bold },
+  body: { color: theme.textSecondary, fontSize: 13, lineHeight: 18, fontFamily: typography.fontFamily.regular },
+  date: { color: theme.textSecondary, fontSize: 11, marginTop: 2, fontFamily: typography.fontFamily.regular },
+  unreadDot: { width: 8, height: 8, borderRadius: 4, backgroundColor: theme.action, marginTop: 6 },
 });

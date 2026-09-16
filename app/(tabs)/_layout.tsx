@@ -7,26 +7,11 @@ export default function TabsLayout() {
       tabBar={(props) => <ChimsoyTabBar {...props} />}
       screenOptions={{ headerShown: false }}
     >
-      <Tabs.Screen
-        name="index"
-        options={{ title: 'Accueil' }}
-      />
-      <Tabs.Screen
-        name="games"
-        options={{ title: 'Jeux' }}
-      />
-      <Tabs.Screen
-        name="tournaments"
-        options={{ title: 'Tournois' }}
-      />
-      <Tabs.Screen
-        name="wallet"
-        options={{ title: 'Portefeuille' }}
-      />
-      <Tabs.Screen
-        name="profile"
-        options={{ title: 'Profil' }}
-      />
+      <Tabs.Screen name="index" options={{ title: 'Accueil' }} />
+      <Tabs.Screen name="games" options={{ title: 'Jeux' }} />
+      <Tabs.Screen name="communities" options={{ title: 'Communautés' }} />
+      <Tabs.Screen name="leaderboard" options={{ title: 'Classements' }} />
+      <Tabs.Screen name="profile" options={{ title: 'Profil' }} />
     </Tabs>
   );
 }

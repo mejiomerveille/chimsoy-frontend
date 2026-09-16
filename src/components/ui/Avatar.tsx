@@ -1,5 +1,5 @@
 import { StyleSheet, Text, View } from 'react-native';
-import { colors, typography } from '@/src/theme/tokens';
+import { colors, typography , theme} from '@/src/theme/tokens';
 
 type AvatarProps = {
   initials: string;
@@ -17,8 +17,8 @@ export function Avatar({ initials, size = 48, tone = 'accent' }: AvatarProps) {
 
 const styles = StyleSheet.create({
   base: { alignItems: 'center', justifyContent: 'center' },
-  accent: { backgroundColor: colors.accent },
-  primary: { backgroundColor: colors.primary },
-  gold: { backgroundColor: colors.gold },
+  accent: { backgroundColor: theme.action },
+  primary: { backgroundColor: theme.link },
+  gold: { backgroundColor: theme.reward },
   label: { color: '#fff', fontWeight: '700', fontFamily: typography.fontFamily.bold },
 });

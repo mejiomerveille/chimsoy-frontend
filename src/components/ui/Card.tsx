@@ -1,5 +1,5 @@
 import { StyleSheet, View, type ViewProps } from 'react-native';
-import { colors, radius, spacing } from '@/src/theme/tokens';
+import { colors, radii, spacing , theme} from '@/src/theme/tokens';
 
 type CardProps = ViewProps & {
   tone?: 'surface' | 'background' | 'primary';
@@ -16,11 +16,11 @@ export function Card({ children, tone = 'surface', compact = false, style, ...pr
 
 const styles = StyleSheet.create({
   base: {
-    borderRadius: radius.lg,
+    borderRadius: radii.lg,
     padding: spacing.lg,
   },
-  surface: { backgroundColor: colors.surface },
-  background: { backgroundColor: colors.background },
-  primary: { backgroundColor: colors.primary },
-  compact: { padding: spacing.md, borderRadius: radius.md },
+  surface: { backgroundColor: theme.surface },
+  background: { backgroundColor: theme.background },
+  primary: { backgroundColor: theme.link },
+  compact: { padding: spacing.md, borderRadius: radii.md },
 });

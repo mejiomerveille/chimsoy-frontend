@@ -1,149 +1,157 @@
 import { useState } from 'react';
-import { Modal, Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
+import { Pressable, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Animated, { FadeInDown } from 'react-native-reanimated';
-import { ArrowDownToLine, ArrowDownUp, ArrowUpFromLine, Check, X } from 'lucide-react-native';
-import { Button, Card } from '@/src/components/ui';
-import { colors, radius, spacing, typography } from '@/src/theme/tokens';
+import { ArrowDownToLine, ArrowUpFromLine, Trophy, Zap } from 'lucide-react-native';
+import { colors, radii, spacing, typography, theme } from '@/src/theme/tokens';
 import { mockWallet } from '@/src/services/mockData';
 import { useAppStore } from '@/src/store/useAppStore';
+
+type Tab = 'deposit' | 'withdraw' | 'history';
 
 export default function WalletScreen() {
   const walletBalance = useAppStore((s) => s.walletBalance);
   const addCoins = useAppStore((s) => s.addCoins);
-  const [modalType, setModalType] = useState<'deposit' | 'withdraw' | null>(null);
+  const [activeTab, setActiveTab] = useState<Tab>('deposit');
   const [amount, setAmount] = useState('');
-  const [success, setSuccess] = useState(false);
 
   const handleConfirm = () => {
     const num = parseInt(amount, 10);
     if (!num || num <= 0) return;
-    if (modalType === 'deposit') addCoins(num);
+    if (activeTab === 'deposit') addCoins(num);
     else addCoins(-num);
-    setSuccess(true);
-    setTimeout(() => {
-      setSuccess(false);
-      setModalType(null);
-      setAmount('');
-    }, 1500);
+    setAmount('');
   };
 
   return (
     <SafeAreaView style={styles.safeArea}>
-      <View style={styles.header}>
-        <Text style={styles.eyebrow}>TON ARGENT</Text>
+      <Animated.ScrollView entering={FadeInDown.duration(300)} contentContainerStyle={styles.scrollContent} showsVerticalScrollIndicator={false}>
         <Text style={styles.title}>Portefeuille</Text>
-      </View>
 
-      <Card tone="primary" style={styles.balanceCard}>
-        <Text style={styles.balanceLabel}>SOLDE DISPONIBLE</Text>
-        <Text style={styles.balanceValue}>{walletBalance.toLocaleString('fr-FR')} FCFA</Text>
-        <View style={styles.actions}>
-          <Pressable onPress={() => setModalType('deposit')} style={({ pressed }) => [styles.actionBtn, pressed && styles.actionPressed]}>
-            <ArrowDownToLine color={colors.background} size={18} /><Text style={styles.actionLabel}>Déposer</Text>
-          </Pressable>
-          <Pressable onPress={() => setModalType('withdraw')} style={({ pressed }) => [styles.actionBtn, styles.actionBtnSecondary, pressed && styles.actionPressed]}>
-            <ArrowUpFromLine color={colors.textPrimary} size={18} /><Text style={styles.actionLabelSecondary}>Retirer</Text>
-          </Pressable>
+        <View style={styles.balanceCard}>
+          <Text style={styles.balanceLabel}>Solde disponible</Text>
+          <Text style={styles.balanceValue}>{walletBalance.toLocaleString('fr-FR')} FCFA</Text>
         </View>
-      </Card>
 
-      <View style={styles.historyHeader}>
-        <Text style={styles.historyTitle}>Historique</Text>
-        <ArrowDownUp color={colors.textSecondary} size={16} />
-      </View>
+        <View style={styles.tabsRow}>
+          {(['deposit', 'withdraw', 'history'] as Tab[]).map((tab) => (
+            <Pressable
+              key={tab}
+              onPress={() => setActiveTab(tab)}
+              style={({ pressed }) => [styles.tab, activeTab === tab && styles.tabActive, pressed && styles.tabPressed]}
+            >
+              <Text style={[styles.tabText, activeTab === tab ? styles.tabTextActive : styles.tabTextInactive]}>
+                {tab === 'deposit' ? 'DÉPÔT' : tab === 'withdraw' ? 'RETRAIT' : 'HISTORIQUE'}
+              </Text>
+            </Pressable>
+          ))}
+        </View>
 
-      <View style={styles.history}>
-        {mockWallet.transactions.map((tx, idx) => (
-          <Animated.View key={tx.id} entering={FadeInDown.delay(idx * 60).duration(200)} style={styles.txRow}>
-            <View style={[styles.txIcon, { backgroundColor: tx.amount >= 0 ? 'rgba(31,174,94,0.15)' : 'rgba(255,106,44,0.15)' }]}>
-              {tx.amount >= 0 ? <ArrowDownToLine color={colors.success} size={16} /> : <ArrowUpFromLine color={colors.accent} size={16} />}
+        {activeTab === 'deposit' && (
+          <View style={styles.formSection}>
+            <Text style={styles.formLabel}>Montant à déposer (FCFA)</Text>
+            <TextInput
+              style={styles.input}
+              placeholder="Ex: 2000"
+              placeholderTextColor={theme.textSecondary}
+              keyboardType="numeric"
+              value={amount}
+              onChangeText={setAmount}
+            />
+            <View style={styles.quickAmounts}>
+              {[1000, 2000, 5000].map((amt) => (
+                <Pressable key={amt} onPress={() => setAmount(String(amt))} style={({ pressed }) => [styles.quickBtn, pressed && styles.quickBtnPressed]}>
+                  <Text style={styles.quickBtnText}>{amt.toLocaleString('fr-FR')}</Text>
+                </Pressable>
+              ))}
             </View>
-            <View style={styles.txInfo}>
-              <Text style={styles.txLabel}>{tx.label}</Text>
-              <Text style={styles.txDate}>{new Date(tx.createdAt).toLocaleDateString('fr-FR')}</Text>
-            </View>
-            <Text style={[styles.txAmount, { color: tx.amount >= 0 ? colors.success : colors.accent }]}>
-              {tx.amount >= 0 ? '+' : ''}{tx.amount.toLocaleString('fr-FR')} F
-            </Text>
-          </Animated.View>
-        ))}
-      </View>
-
-      <Modal visible={modalType !== null} transparent animationType="fade" onRequestClose={() => setModalType(null)}>
-        <View style={styles.modalOverlay}>
-          <View style={styles.modalCard}>
-            {success ? (
-              <View style={styles.successView}>
-                <View style={styles.successIcon}><Check color={colors.success} size={32} /></View>
-                <Text style={styles.successText}>{modalType === 'deposit' ? 'Dépôt réussi !' : 'Retrait réussi !'}</Text>
-              </View>
-            ) : (
-              <>
-                <View style={styles.modalHeader}>
-                  <Text style={styles.modalTitle}>{modalType === 'deposit' ? 'Déposer' : 'Retirer'}</Text>
-                  <Pressable onPress={() => setModalType(null)} style={styles.modalClose}><X color={colors.textSecondary} size={20} /></Pressable>
-                </View>
-                <Text style={styles.modalLabel}>Montant en FCFA</Text>
-                <TextInput
-                  style={styles.modalInput}
-                  placeholder="Ex: 2000"
-                  placeholderTextColor={colors.textSecondary}
-                  keyboardType="numeric"
-                  value={amount}
-                  onChangeText={setAmount}
-                />
-                <View style={styles.quickAmounts}>
-                  {[1000, 2000, 5000].map((amt) => (
-                    <Pressable key={amt} onPress={() => setAmount(String(amt))} style={styles.quickBtn}>
-                      <Text style={styles.quickBtnText}>{amt.toLocaleString('fr-FR')}</Text>
-                    </Pressable>
-                  ))}
-                </View>
-                <Button label="Confirmer" fullWidth onPress={handleConfirm} disabled={!amount} />
-              </>
-            )}
+            <Pressable onPress={handleConfirm} style={({ pressed }) => [styles.confirmBtn, pressed && styles.confirmBtnPressed]}>
+              <Text style={styles.confirmBtnText}>Confirmer le dépôt</Text>
+            </Pressable>
           </View>
-        </View>
-      </Modal>
+        )}
+
+        {activeTab === 'withdraw' && (
+          <View style={styles.formSection}>
+            <Text style={styles.formLabel}>Montant à retirer (FCFA)</Text>
+            <TextInput
+              style={styles.input}
+              placeholder="Ex: 1000"
+              placeholderTextColor={theme.textSecondary}
+              keyboardType="numeric"
+              value={amount}
+              onChangeText={setAmount}
+            />
+            <View style={styles.quickAmounts}>
+              {[500, 1000, 2000].map((amt) => (
+                <Pressable key={amt} onPress={() => setAmount(String(amt))} style={({ pressed }) => [styles.quickBtn, pressed && styles.quickBtnPressed]}>
+                  <Text style={styles.quickBtnText}>{amt.toLocaleString('fr-FR')}</Text>
+                </Pressable>
+              ))}
+            </View>
+            <Pressable onPress={handleConfirm} style={({ pressed }) => [styles.confirmBtn, { backgroundColor: theme.money }, pressed && styles.confirmBtnPressed]}>
+              <Text style={styles.confirmBtnText}>Confirmer le retrait</Text>
+            </Pressable>
+          </View>
+        )}
+
+        {activeTab === 'history' && (
+          <View style={styles.historyList}>
+            <Text style={styles.historyTitle}>Transactions récentes</Text>
+            {mockWallet.transactions.map((tx, idx) => (
+              <Animated.View key={tx.id} entering={FadeInDown.delay(idx * 60).duration(200)} style={styles.txRow}>
+                <View style={[styles.txIcon, { backgroundColor: tx.amount >= 0 ? 'rgba(31,174,94,0.15)' : 'rgba(225,59,59,0.15)' }]}>
+                  {tx.type === 'win' ? <Trophy color={theme.success} size={16} /> :
+                   tx.type === 'deposit' ? <ArrowDownToLine color={theme.success} size={16} /> :
+                   tx.type === 'withdrawal' ? <ArrowUpFromLine color={theme.reward} size={16} /> :
+                   <Zap color={theme.danger} size={16} />}
+                </View>
+                <View style={styles.txInfo}>
+                  <Text style={styles.txLabel}>{tx.label}</Text>
+                  <Text style={styles.txDate}>{new Date(tx.createdAt).toLocaleDateString('fr-FR')}</Text>
+                </View>
+                <Text style={[styles.txAmount, { color: tx.amount >= 0 ? theme.success : theme.danger }]}>
+                  {tx.amount >= 0 ? '+' : ''}{tx.amount.toLocaleString('fr-FR')} F
+                </Text>
+              </Animated.View>
+            ))}
+          </View>
+        )}
+      </Animated.ScrollView>
     </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
-  safeArea: { flex: 1, backgroundColor: colors.background },
-  header: { padding: spacing.lg, gap: spacing.xs },
-  eyebrow: { color: colors.accent, fontSize: 10, fontWeight: '700', fontFamily: typography.fontFamily.bold, letterSpacing: 1.4 },
-  title: { color: colors.textPrimary, fontSize: 26, fontWeight: '700', fontFamily: typography.fontFamily.bold, letterSpacing: -0.5 },
-  balanceCard: { margin: spacing.lg, gap: spacing.md },
-  balanceLabel: { color: 'rgba(255,255,255,0.5)', fontSize: 11, fontWeight: '700', fontFamily: typography.fontFamily.bold, letterSpacing: 1 },
-  balanceValue: { color: '#fff', fontSize: 34, fontWeight: '700', fontFamily: typography.fontFamily.bold, letterSpacing: -1 },
-  actions: { flexDirection: 'row', gap: spacing.sm, marginTop: spacing.sm },
-  actionBtn: { flex: 1, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: spacing.xs, backgroundColor: colors.accent, borderRadius: radius.full, paddingVertical: 12, minHeight: 44 },
-  actionBtnSecondary: { backgroundColor: colors.surface },
-  actionPressed: { opacity: 0.8, transform: [{ scale: 0.97 }] },
-  actionLabel: { color: colors.background, fontSize: 13, fontWeight: '700', fontFamily: typography.fontFamily.bold },
-  actionLabelSecondary: { color: colors.textPrimary, fontSize: 13, fontWeight: '700', fontFamily: typography.fontFamily.bold },
-  historyHeader: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingHorizontal: spacing.lg, marginTop: spacing.sm },
-  historyTitle: { color: colors.textPrimary, fontSize: 18, fontWeight: '700', fontFamily: typography.fontFamily.bold },
-  history: { padding: spacing.lg, gap: spacing.sm },
-  txRow: { flexDirection: 'row', alignItems: 'center', gap: spacing.sm, backgroundColor: colors.surface, borderRadius: radius.md, padding: spacing.md },
+  safeArea: { flex: 1, backgroundColor: theme.background },
+  scrollContent: { paddingHorizontal: spacing.lg, paddingBottom: 120, gap: spacing.lg },
+  title: { color: theme.textPrimary, fontSize: typography.title, fontWeight: '700', fontFamily: typography.fontFamily.bold, letterSpacing: -0.5, paddingTop: spacing.sm },
+  balanceCard: { backgroundColor: theme.surface, borderRadius: radii.lg, padding: spacing.lg, gap: spacing.xs },
+  balanceLabel: { color: theme.textSecondary, fontSize: typography.caption, fontFamily: typography.fontFamily.regular },
+  balanceValue: { color: theme.reward, fontSize: typography.display, fontWeight: '700', fontFamily: typography.fontFamily.bold, letterSpacing: -1 },
+  tabsRow: { flexDirection: 'row', gap: spacing.sm },
+  tab: { flex: 1, alignItems: 'center', paddingVertical: 12, borderRadius: radii.pill, backgroundColor: theme.surface },
+  tabActive: { backgroundColor: theme.link },
+  tabPressed: { opacity: 0.85, transform: [{ scale: 0.97 }] },
+  tabText: { fontSize: typography.caption, fontWeight: '700', fontFamily: typography.fontFamily.bold, letterSpacing: 0.5 },
+  tabTextActive: { color: theme.textPrimary },
+  tabTextInactive: { color: theme.textSecondary },
+  formSection: { gap: spacing.md },
+  formLabel: { color: theme.textSecondary, fontSize: typography.caption, fontWeight: '600', fontFamily: typography.fontFamily.semiBold },
+  input: { backgroundColor: theme.surface, borderRadius: radii.md, paddingHorizontal: spacing.lg, paddingVertical: 16, fontSize: typography.heading, fontWeight: '700', fontFamily: typography.fontFamily.bold, color: theme.textPrimary },
+  quickAmounts: { flexDirection: 'row', gap: spacing.sm },
+  quickBtn: { flex: 1, alignItems: 'center', paddingVertical: 12, borderRadius: radii.md, backgroundColor: 'rgba(255,106,44,0.12)' },
+  quickBtnPressed: { opacity: 0.8, transform: [{ scale: 0.96 }] },
+  quickBtnText: { color: theme.action, fontSize: typography.caption, fontWeight: '700', fontFamily: typography.fontFamily.bold },
+  confirmBtn: { alignItems: 'center', justifyContent: 'center', backgroundColor: theme.action, borderRadius: radii.pill, paddingVertical: 16, minHeight: 54 },
+  confirmBtnPressed: { opacity: 0.85, transform: [{ scale: 0.98 }] },
+  confirmBtnText: { color: theme.textPrimary, fontSize: typography.body, fontWeight: '700', fontFamily: typography.fontFamily.bold },
+  historyList: { gap: spacing.sm },
+  historyTitle: { color: theme.textPrimary, fontSize: typography.heading, fontWeight: '700', fontFamily: typography.fontFamily.bold, marginBottom: spacing.xs },
+  txRow: { flexDirection: 'row', alignItems: 'center', gap: spacing.sm, backgroundColor: theme.surface, borderRadius: radii.md, padding: spacing.md },
   txIcon: { width: 40, height: 40, alignItems: 'center', justifyContent: 'center', borderRadius: 20 },
   txInfo: { flex: 1 },
-  txLabel: { color: colors.textPrimary, fontSize: 14, fontWeight: '600', fontFamily: typography.fontFamily.semiBold },
-  txDate: { color: colors.textSecondary, fontSize: 12, marginTop: 2, fontFamily: typography.fontFamily.regular },
-  txAmount: { fontSize: 15, fontWeight: '700', fontFamily: typography.fontFamily.bold },
-  modalOverlay: { flex: 1, backgroundColor: 'rgba(0,0,0,0.6)', justifyContent: 'center', alignItems: 'center', padding: spacing.lg },
-  modalCard: { backgroundColor: colors.surface, borderRadius: radius.lg, padding: spacing.lg, width: '100%', gap: spacing.md },
-  modalHeader: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' },
-  modalTitle: { color: colors.textPrimary, fontSize: 20, fontWeight: '700', fontFamily: typography.fontFamily.bold },
-  modalClose: { width: 36, height: 36, alignItems: 'center', justifyContent: 'center', borderRadius: 18, backgroundColor: colors.background },
-  modalLabel: { color: colors.textSecondary, fontSize: 13, fontWeight: '600', fontFamily: typography.fontFamily.semiBold },
-  modalInput: { backgroundColor: colors.background, borderRadius: radius.md, paddingHorizontal: spacing.md, paddingVertical: 14, fontSize: 18, fontWeight: '700', fontFamily: typography.fontFamily.bold, color: colors.textPrimary },
-  quickAmounts: { flexDirection: 'row', gap: spacing.sm },
-  quickBtn: { flex: 1, alignItems: 'center', paddingVertical: 10, borderRadius: radius.sm, backgroundColor: 'rgba(255,106,44,0.12)' },
-  quickBtnText: { color: colors.accent, fontSize: 13, fontWeight: '700', fontFamily: typography.fontFamily.bold },
-  successView: { alignItems: 'center', gap: spacing.md, paddingVertical: spacing.lg },
-  successIcon: { width: 64, height: 64, alignItems: 'center', justifyContent: 'center', borderRadius: 32, backgroundColor: 'rgba(31,174,94,0.15)' },
-  successText: { color: colors.textPrimary, fontSize: 18, fontWeight: '700', fontFamily: typography.fontFamily.bold },
+  txLabel: { color: theme.textPrimary, fontSize: typography.body, fontWeight: '600', fontFamily: typography.fontFamily.semiBold },
+  txDate: { color: theme.textSecondary, fontSize: typography.micro, fontFamily: typography.fontFamily.regular, marginTop: 2 },
+  txAmount: { fontSize: typography.body, fontWeight: '700', fontFamily: typography.fontFamily.bold },
 });
