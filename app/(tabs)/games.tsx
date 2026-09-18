@@ -7,7 +7,7 @@ import { ChevronLeft, ChevronRight, Medal, Search, Trophy, Users } from 'lucide-
 import { colors, radii, spacing, typography, theme } from '@/src/theme/tokens';
 
 import quizDuelBg from '../../assets/images/quiz-duel.jpg';
-import mathBg from '../../assets/images/checkers.jpg';
+import mathBg from '../../assets/images/quick-math.jpg';
 import checkersBg from '../../assets/images/checkers.jpg';
 import cardsBg from '../../assets/images/cards.jpg';
 

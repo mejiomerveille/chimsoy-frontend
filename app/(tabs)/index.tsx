@@ -1,24 +1,20 @@
-import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { Image, Pressable, StyleSheet, Text, View } from 'react-native';
 import { router, Link } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import userPicture from '../../assets/images/kwame.jpg';
 import Animated, { FadeIn, FadeInDown } from 'react-native-reanimated';
 import {
   Bell,
   ChevronRight,
   Crown,
   Eye,
-  Gamepad2,
-  Home as HomeIcon,
   Newspaper,
   Pencil,
-  Plus,
   Sword,
   Trophy,
   Users,
   Wallet as WalletIcon,
-  Zap,
 } from 'lucide-react-native';
-import { Avatar } from '@/src/components/ui';
 import { colors, radii, spacing, typography, theme } from '@/src/theme/tokens';
 import { mockUser } from '@/src/services/mockData';
 import { useAppStore } from '@/src/store/useAppStore';
@@ -54,7 +50,7 @@ export default function HomeScreen() {
 
         <View style={styles.profileCard}>
           <View style={styles.profileLeft}>
-            <Avatar initials={user.avatarInitials} size={48} tone="accent" />
+            <Image source={userPicture} style={styles.avatarImage} />
             <View style={styles.profileInfo}>
               <Text style={styles.pseudo}>{user.username}</Text>
               <View style={styles.rankBadge}>
@@ -77,6 +73,7 @@ export default function HomeScreen() {
             </View>
           </View>
           <Link href="/(tabs)/wallet" style={styles.walletPlusBtn}>
+            <Text style={styles.walletPlusText}>+</Text>
           </Link>
         </View>
 
@@ -155,10 +152,21 @@ const styles = StyleSheet.create({
   profileCard: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', backgroundColor: theme.surface, borderRadius: radii.md, padding: spacing.md },
   profileLeft: { flexDirection: 'row', alignItems: 'center', gap: spacing.md },
   profileInfo: { gap: 4 },
+  avatarImage: { width: 48, height: 48, borderRadius: 24 },
   pseudo: { color: theme.textPrimary, fontSize: typography.heading, fontWeight: '700', fontFamily: typography.fontFamily.bold },
   rankBadge: { flexDirection: 'row', alignItems: 'center', gap: 4, backgroundColor: 'rgba(242,183,5,0.15)', paddingHorizontal: spacing.sm, paddingVertical: 3, borderRadius: radii.pill, alignSelf: 'flex-start' },
   rankText: { color: theme.reward, fontSize: typography.micro, fontWeight: '700', fontFamily: typography.fontFamily.bold },
   editBtn: { width: 36, height: 36, alignItems: 'center', justifyContent: 'center', backgroundColor: 'rgba(255,255,255,0.08)', borderRadius: 18 },
+  walletPlusText: {
+  color: theme.textPrimary,
+  fontSize: 24,
+  fontWeight: '700',
+  fontFamily: typography.fontFamily.bold,
+  textAlign: 'center',
+  textAlignVertical: 'center',
+  includeFontPadding: false,
+},
+  // walletPlusText: { color: theme.textPrimary, fontSize: 26, fontWeight: '700', fontFamily: typography.fontFamily.bold, lineHeight: 28, textAlign: 'center' },
   walletCard: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', backgroundColor: theme.surface, borderRadius: radii.md, padding: spacing.md },
   walletLabel: { color: theme.textSecondary, fontSize: typography.micro, fontWeight: '700', fontFamily: typography.fontFamily.bold, letterSpacing: 1 },
   walletAmountRow: { flexDirection: 'row', alignItems: 'center', gap: spacing.sm, marginTop: 4 },

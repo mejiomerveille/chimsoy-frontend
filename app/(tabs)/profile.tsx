@@ -1,7 +1,8 @@
-import { StyleSheet, Text, View } from 'react-native';
+import { Image, StyleSheet, Text, View } from 'react-native';
 import { Link } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Animated, { FadeInDown } from 'react-native-reanimated';
+import userPicture from '../../assets/images/kwame.jpg';
 import { Flame, Settings as SettingsIcon, Trophy, Zap } from 'lucide-react-native';
 import { Avatar, Badge, Card, ProgressBar } from '@/src/components/ui';
 import { colors, radii, spacing, typography , theme} from '@/src/theme/tokens';
@@ -21,7 +22,9 @@ export default function ProfileScreen() {
         <Animated.View entering={FadeInDown.duration(400)}>
           <Card tone="primary" style={styles.profileCard}>
             <View style={styles.profileTop}>
-              <Avatar initials={user.avatarInitials} size={64} tone="accent" />
+              {/* <Avatar initials={user.avatarInitials} size={64} tone="accent" /> */}
+                          <Image source={userPicture} style={styles.avatarImage} />
+              
               <View style={styles.profileInfo}>
                 <Text style={styles.username}>{user.username}</Text>
                 <Text style={styles.userMeta}>{user.city} · {user.country}</Text>
@@ -110,6 +113,7 @@ const styles = StyleSheet.create({
   iconBtn: { width: 42, height: 42, alignItems: 'center', justifyContent: 'center', backgroundColor: theme.surface, borderRadius: 21 },
   content: { padding: spacing.lg, gap: spacing.lg },
   profileCard: { gap: spacing.lg },
+  avatarImage: { width: 48, height: 48, borderRadius: 24 },
   profileTop: { flexDirection: 'row', gap: spacing.md },
   profileInfo: { flex: 1, gap: spacing.xs },
   username: { color: '#fff', fontSize: 24, fontWeight: '700', fontFamily: typography.fontFamily.bold },
